@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Marcellus&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Marcellus&family=Noto+Serif+Tamil:wght@400;500;600&display=swap"
     rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -141,6 +141,20 @@
     }
 
     .scene.active button {
+      pointer-events: auto;
+    }
+
+    .scene.active .scene-content {
+      pointer-events: none;
+    }
+
+    .scene.active button,
+    .scene.active textarea,
+    .scene.active input,
+    .scene.active a,
+    .scene.active .choice,
+    .scene.active .reply-block,
+    .scene.active .bf-hit {
       pointer-events: auto;
     }
 
@@ -451,7 +465,7 @@
 
     .bf-hit {
       position: absolute;
-      inset: -45px;
+      inset: -55px;
       border-radius: 50%;
     }
 
@@ -602,6 +616,7 @@
     }
 
     #butterfly.bf--clickable {
+      z-index: 100;
       pointer-events: auto;
       cursor: pointer;
       filter: drop-shadow(0 0 26px rgba(244, 223, 155, .6)) drop-shadow(0 0 48px rgba(255, 143, 171, .4));
@@ -1147,6 +1162,398 @@
       color: var(--rose);
     }
 
+    /* ---------- Radha-Krishna memory scene ---------- */
+    #sceneLoveMemory {
+      overflow: hidden;
+      align-items: stretch;
+      justify-content: flex-start;
+    }
+
+    #sceneLoveMemory .lm-content {
+      width: 100%;
+      max-width: 100%;
+      height: 100dvh;
+      min-height: 0;
+      max-height: 100dvh;
+
+      overflow-y: auto;
+      overflow-x: hidden;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+
+      box-sizing: border-box;
+
+      padding-top: max(28px, env(safe-area-inset-top));
+      padding-right: 18px;
+      padding-bottom: max(100px, calc(60px + env(safe-area-inset-bottom)));
+      padding-left: 18px;
+
+      gap: 22px;
+
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+
+      scrollbar-width: none;
+    }
+
+    #sceneLoveMemory .lm-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .lm-image-wrap {
+      position: relative;
+      width: min(88vw, 340px);
+      max-width: 340px;
+      height: auto;
+      flex: 0 0 auto;
+
+      border-radius: 20px;
+      overflow: hidden;
+
+      margin-top: 8px;
+
+      opacity: 0;
+      transform: scale(.86) translateY(20px);
+      filter: blur(10px);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, .5), 0 0 0 1px rgba(212, 175, 55, .25);
+      transition: opacity 1.9s ease, transform 1.9s cubic-bezier(.2, .8, .3, 1), filter 1.9s ease;
+      background: rgba(0, 0, 0, .18);
+    }
+
+    .lm-image-wrap.in {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      filter: blur(0);
+    }
+
+    #radhaKrishnaImage {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .lm-image-fallback {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      min-height: 220px;
+      padding: 30px 18px;
+      font-family: 'Noto Serif Tamil', serif;
+      font-size: 1.4rem;
+      text-align: center;
+      color: var(--rose);
+      background: radial-gradient(ellipse at center, rgba(255, 143, 171, .12), transparent 70%);
+    }
+
+    .lm-image-wrap.img-error #radhaKrishnaImage {
+      display: none;
+    }
+
+    .lm-image-wrap.img-error .lm-image-fallback {
+      display: flex;
+    }
+
+    @media (max-width: 380px) {
+      .lm-image-wrap {
+        width: min(86vw, 300px);
+      }
+    }
+
+    @media (min-width: 381px) and (max-width: 767px) {
+      .lm-image-wrap {
+        width: min(88vw, 340px);
+      }
+    }
+
+    .poem {
+      width: 100%;
+      max-width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      flex: 0 0 auto;
+    }
+
+    .poem-line {
+      width: 100%;
+      max-width: 340px;
+      margin: 0;
+      font-family: 'Noto Serif Tamil', 'Cormorant Garamond', serif;
+      font-weight: 500;
+      font-size: clamp(0.98rem, 4.15vw, 1.22rem);
+      line-height: 1.75;
+      text-align: center;
+      overflow-wrap: anywhere;
+      color: var(--cream);
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(5px);
+      transition: opacity 1.3s ease, transform 1.3s ease, filter 1.3s ease;
+    }
+
+    .poem-line.show {
+      opacity: .96;
+      transform: none;
+      filter: blur(0);
+    }
+
+    #lmRadhaLine.story-line.names {
+      font-family: 'Noto Serif Tamil', serif;
+      font-size: clamp(1.8rem, 8vw, 2.5rem);
+      line-height: 1.2;
+      max-width: 100%;
+      margin: 4px 0;
+    }
+
+    /* Tamil text must never fall back to an English/cursive font */
+    .tamil-text {
+      font-family: 'Noto Serif Tamil', 'Cormorant Garamond', serif !important;
+    }
+
+    .lm-climax-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      width: 100%;
+      max-width: 340px;
+      flex: 0 0 auto;
+      margin-top: 4px;
+    }
+
+    .lm-climax-line {
+      margin: 0;
+      width: 100%;
+      max-width: 320px;
+      font-family: 'Noto Serif Tamil', serif;
+      font-weight: 500;
+      font-size: clamp(1.12rem, 4.6vw, 1.46rem);
+      line-height: 1.8;
+      text-align: center;
+      color: var(--cream);
+      overflow-wrap: anywhere;
+      opacity: 0;
+      transform: translateY(16px);
+      filter: blur(6px);
+      transition: opacity 1.4s ease, transform 1.4s ease, filter 1.4s ease;
+    }
+
+    .lm-climax-line.show {
+      opacity: .97;
+      transform: none;
+      filter: blur(0);
+    }
+
+    .lm-hero-line {
+      margin: 8px 0 0;
+      width: 100%;
+      max-width: 320px;
+      font-family: 'Noto Serif Tamil', serif;
+      font-weight: 600;
+      font-size: clamp(1.65rem, 7.4vw, 2.5rem);
+      line-height: 1.45;
+      text-align: center;
+      color: var(--warm-white);
+      overflow-wrap: anywhere;
+      text-shadow: 0 0 26px rgba(255, 143, 171, .55), 0 0 60px rgba(244, 223, 155, .35);
+      opacity: 0;
+      transform: translateY(20px) scale(.96);
+      filter: blur(8px);
+      transition: opacity 2.4s ease, transform 2.4s cubic-bezier(.2, .8, .3, 1), filter 2.4s ease;
+    }
+
+    .lm-hero-line.show {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+
+    .reply-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 360px;
+      flex: 0 0 auto;
+      padding-bottom: 8px;
+      opacity: 0;
+      transform: translateY(14px);
+      pointer-events: none;
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+
+    .reply-block.show {
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+    }
+
+    #loveReply {
+      width: 100%;
+      min-height: 120px;
+      max-height: 240px;
+      resize: vertical;
+      box-sizing: border-box;
+      border-radius: 16px;
+      border: 1px solid rgba(212, 175, 55, .35);
+      background: rgba(255, 247, 250, .07);
+      color: var(--cream);
+      font-family: 'Noto Serif Tamil', 'Cormorant Garamond', serif;
+      font-size: 16px;
+      padding: 15px;
+      line-height: 1.6;
+      outline: none;
+    }
+
+    #loveReply::placeholder {
+      color: rgba(251, 233, 238, .45);
+    }
+
+    #sendReplyBtn {
+      font-family: 'Marcellus', serif;
+      font-size: 1rem;
+      letter-spacing: .02em;
+      color: #2a0713;
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 28px;
+      min-height: 52px;
+      width: min(86vw, 300px);
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, #ffd7e2 0%, #ff8fab 32%, #ff2d63 78%);
+      box-shadow: 0 10px 26px rgba(255, 45, 99, .4), inset 0 1px 0 rgba(255, 255, 255, .6);
+      transition: transform .25s ease, opacity .25s ease;
+    }
+
+    #sendReplyBtn:active {
+      transform: scale(.97);
+    }
+
+    #sendReplyBtn:disabled {
+      opacity: .65;
+    }
+
+    .reply-note {
+      min-height: 1.4em;
+      margin: 0;
+      font-size: .92rem;
+      font-style: italic;
+      color: var(--rose);
+      opacity: 0;
+      transition: opacity .6s ease;
+    }
+
+    .reply-note.show {
+      opacity: .95;
+    }
+
+    .saved-reply-card {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 360px;
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      padding: 22px 20px;
+      border-radius: 18px;
+      background: linear-gradient(155deg, rgba(31, 13, 21, .92), rgba(23, 10, 16, .92));
+      border: 1px solid rgba(212, 175, 55, .4);
+      box-shadow: 0 0 0 1px rgba(255, 143, 171, .12), 0 18px 40px rgba(0, 0, 0, .5), 0 0 30px rgba(255, 143, 171, .15);
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 1.1s ease, transform 1.1s ease;
+    }
+
+    .saved-reply-card.show {
+      opacity: 1;
+      transform: none;
+    }
+
+    .saved-reply-card h3 {
+      margin: 0;
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+      font-size: 1.6rem;
+      color: var(--champagne);
+      text-align: center;
+    }
+
+    #savedReplyMessage {
+      margin: 0;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      font-family: 'Noto Serif Tamil', 'Cormorant Garamond', serif;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: var(--warm-white);
+      text-align: center;
+    }
+
+    .saved-reply-footer {
+      text-align: center;
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+
+    #sceneLoveMemory .story-line,
+    #sceneLoveMemory .story-line.big {
+      flex: 0 0 auto;
+    }
+
+    #firebaseStatus {
+      position: fixed;
+      top: max(8px, env(safe-area-inset-top));
+      right: max(10px, env(safe-area-inset-right));
+      max-width: 60vw;
+      font-size: .66rem;
+      letter-spacing: .04em;
+      color: rgba(244, 223, 155, .55);
+      text-align: right;
+      z-index: 121;
+      pointer-events: none;
+      opacity: .85;
+    }
+
+    #ownerPreviewBtn {
+      position: fixed;
+      left: max(12px, env(safe-area-inset-left));
+      top: max(10px, env(safe-area-inset-top));
+      z-index: 130;
+      font-size: .7rem;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(212, 175, 55, .4);
+      background: rgba(18, 7, 13, .7);
+      color: var(--champagne);
+      cursor: pointer;
+    }
+
+    @media (min-width:768px) {
+      #sceneLoveMemory .lm-content {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .lm-image-wrap {
+        width: min(78vw, 420px);
+      }
+
+      .poem-line {
+        font-size: clamp(1.15rem, 2vw, 1.4rem);
+      }
+    }
+
     /* ---------- dev ---------- */
     #devSkip {
       position: fixed;
@@ -1223,6 +1630,100 @@
       .scene {
         filter: none !important;
         transform: none !important;
+      }
+    }
+
+    /* ---------- sceneLoveMemory scroll fix (mobile swipe/scroll) ---------- */
+    #sceneLoveMemory {
+      overflow: hidden !important;
+      pointer-events: none;
+    }
+
+    #sceneLoveMemory.active {
+      pointer-events: auto !important;
+    }
+
+    #sceneLoveMemory .lm-content {
+      pointer-events: auto !important;
+
+      width: 100%;
+      height: 100dvh;
+      min-height: 0;
+      max-height: 100dvh;
+
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+
+      box-sizing: border-box;
+
+      padding-top: max(28px, env(safe-area-inset-top));
+      padding-right: 18px;
+      padding-bottom: max(140px, calc(100px + env(safe-area-inset-bottom)));
+      padding-left: 18px;
+
+      gap: 22px;
+
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+      touch-action: pan-y;
+
+      scrollbar-width: none;
+    }
+
+    #sceneLoveMemory .lm-content::-webkit-scrollbar {
+      display: none;
+    }
+
+    #sceneLoveMemory .lm-content > * {
+      pointer-events: auto;
+      flex-shrink: 0;
+    }
+
+    #sceneLoveMemory .lm-image-wrap,
+    #sceneLoveMemory .poem,
+    #sceneLoveMemory .reply-block,
+    #sceneLoveMemory .saved-reply-card {
+      flex-shrink: 0;
+    }
+
+    #sceneLoveMemory .reply-block {
+      pointer-events: auto !important;
+    }
+
+    #sceneLoveMemory #loveReply {
+      pointer-events: auto !important;
+      touch-action: auto;
+    }
+
+    #sceneLoveMemory #sendReplyBtn {
+      pointer-events: auto !important;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 380px) {
+      #sceneLoveMemory .lm-content {
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-bottom: 150px;
+        gap: 18px;
+      }
+
+      #sceneLoveMemory .lm-image-wrap {
+        width: min(86vw, 300px);
+      }
+
+      #sceneLoveMemory .poem {
+        max-width: 310px;
+      }
+
+      #sceneLoveMemory .poem-line {
+        font-size: .98rem;
+        line-height: 1.7;
       }
     }
   </style>
@@ -1327,12 +1828,63 @@
       </div>
     </section>
 
+    <section id="sceneLoveMemory" class="scene">
+      <div class="container scene-content lm-content" id="lmContent">
+        <div class="lm-image-wrap" id="lmImageWrap">
+          <img id="radhaKrishnaImage" src="images/radha-krishna-love.jpg" alt="Radha and Krishna">
+          <div class="lm-image-fallback" id="lmImageFallback">🌸 ராதா கிருஷ்ணா 🌸</div>
+        </div>
+
+        <p class="story-line names" id="lmRadhaLine"></p>
+
+        <div class="poem" id="poemBlock">
+          <p class="poem-line" id="poem1">உன்னை நான் காதலித்தது<br>உன் அழகிற்காக மட்டும் அல்ல…</p>
+          <p class="poem-line" id="poem2">என் மனம் அமைதியாகும் இடம்<br>உன் அருகில் என்பதற்காக.</p>
+          <p class="poem-line" id="poem3">உலகம் என்னை விட்டு விலகினாலும்,<br>என் உயிர் உன்னை விட்டு விலகாது.</p>
+          <p class="poem-line" id="poem4">இந்தப் பிறவி முடிந்தாலும்<br>நம் காதல் முடிய வேண்டியதில்லை…</p>
+          <p class="poem-line" id="poem5">மீண்டும் ஒரு பிறவி இருந்தால்,<br>நான் கேட்கும் வரம் ஒன்றே —</p>
+          <p class="poem-line" id="poem6">மீண்டும் உன்னைச் சந்திக்க வேண்டும்.<br>மீண்டும் உன்னை நேசிக்க வேண்டும்.<br>மீண்டும் உன்னையே என் உலகமாக்க வேண்டும்.</p>
+          <p class="poem-line" id="poem7">நான் கிருஷ்ணனாகப் பிறந்தால்,<br>என் மனம் தேடும் ராதா நீயாகவே இருக்க வேண்டும்…</p>
+          <p class="poem-line" id="poem8">நான் பட்டாம்பூச்சியாகப் பிறந்தால்,<br>உலகம் முழுவதும் மலர்கள் இருந்தாலும்,<br>என் சிறகுகள் வந்து அமரும் மலர்<br>நீயாகவே இருக்க வேண்டும்.</p>
+          <p class="poem-line" id="poem9">ஒருநாள் நான் இல்லாமல் போனாலும்…<br>என் காதல் மட்டும்<br>உன் நினைவில் உயிரோடு இருக்கட்டும்.</p>
+          <p class="poem-line" id="poem10">ஏனென்றால்…</p>
+          <p class="poem-line" id="poem11">நான் உன்னை காதலித்தது<br>இந்த வாழ்க்கைக்காக மட்டும் அல்ல.</p>
+          <p class="poem-line" id="poem12">எத்தனை பிறவிகள் வந்தாலும்,<br>என் உயிர் தேடும் ஒரே முகம்…<br>நீ தான். ❤️</p>
+          <p class="poem-line" id="poem13">என்றும் உன் கிருஷ்ணன்…<br>உன்னைத் தேடும் என் ராதா. 🦋</p>
+        </div>
+
+        <div class="lm-climax-block" id="lmClimaxBlock">
+          <p class="lm-climax-line" id="lmClimax1"></p>
+          <p class="lm-climax-line" id="lmClimax2"></p>
+          <p class="lm-climax-line" id="lmClimax3"></p>
+          <p class="lm-hero-line" id="lmHeroFinal"></p>
+        </div>
+
+        <div class="reply-block" id="replyBlock">
+          <textarea id="loveReply" maxlength="1000" placeholder="என் மனதில் இருப்பது…"></textarea>
+          <button id="sendReplyBtn" type="button">என் பதில் ❤️</button>
+          <p class="reply-note" id="replyNote"></p>
+        </div>
+
+        <div class="saved-reply-card" id="savedReplyCard">
+          <h3>உன் ராதாவின் பதில் ❤️</h3>
+          <p id="savedReplyMessage"></p>
+          <div class="saved-reply-footer">— GOPS ❤️</div>
+        </div>
+
+        <p class="story-line" id="lmFinalLine1"></p>
+        <p class="story-line names" id="lmFinalLine2"></p>
+      </div>
+      <audio id="memoryMusic" src="msf1000319695(2).mp3" preload="auto" loop></audio>
+    </section>
+
+    <div id="firebaseStatus"></div>
+
     <div id="glowCore"></div>
     <div id="flash"></div>
     <div id="fxLayer"></div>
 
     <!-- Music starts softly on the first heart tap (never before). Keep love-song.mp3 next to this file. -->
-    <audio id="bgMusic" src="love-song.mp3" loop preload="auto"></audio>
     <button id="muteBtn" type="button" aria-label="Mute or unmute music">🔊</button>
 
     <!-- REMOVE BEFORE SENDING TO RECIPIENT -->
@@ -1418,6 +1970,33 @@
       });
 
       // ----------------------------------------
+      // Radha-Krishna image: graceful fallback if the exact filename/
+      // extension differs, without ever breaking the memory scene
+      // ----------------------------------------
+      (function setupLoveImageFallback() {
+        const img = document.getElementById("radhaKrishnaImage");
+        const wrap = document.getElementById("lmImageWrap");
+        if (!img || !wrap) return;
+        const candidates = [
+          "images/radha-krishna-love.jpg",
+          "images/radha-krishna-love.jpeg",
+          "images/radha-krishna-love.JPG",
+          "images/radha-krishna-love.png"
+        ];
+        let idx = candidates.indexOf(img.getAttribute("src"));
+        if (idx === -1) idx = 0;
+        img.addEventListener("error", function tryNext() {
+          idx++;
+          if (idx < candidates.length) {
+            img.src = candidates[idx];
+          } else {
+            wrap.classList.add("img-error");
+            img.removeEventListener("error", tryNext);
+          }
+        });
+      })();
+
+      // ----------------------------------------
       // music  (begins on the first heart tap, never on load)
       // ----------------------------------------
       let musicStarted = false;
@@ -1454,13 +2033,79 @@
         }
       }
 
+      const memoryMusic = document.getElementById("memoryMusic");
+      if (memoryMusic) {
+        memoryMusic.addEventListener("error", function () {
+          console.warn("love-memory.mp3 could not be loaded — the memory scene will continue silently.");
+        });
+      }
+
       if (muteBtn) {
         muteBtn.addEventListener("click", function () {
           if (!bgMusic) return;
-          bgMusic.muted = !bgMusic.muted;
-          muteBtn.classList.toggle("muted", bgMusic.muted);
-          muteBtn.textContent = bgMusic.muted ? "🔇" : "🔊";
+          const nowMuted = !bgMusic.muted;
+          bgMusic.muted = nowMuted;
+          if (memoryMusic) memoryMusic.muted = nowMuted;
+          muteBtn.classList.toggle("muted", nowMuted);
+          muteBtn.textContent = nowMuted ? "🔇" : "🔊";
         });
+      }
+
+      // ----------------------------------------
+      // memory-scene music crossfade (love-memory.mp3)
+      // ----------------------------------------
+      let memoryMusicStarted = false;
+      let memoryFadeInterval = null;
+
+      function fadeElementVolume(el, target, ms, cb) {
+        if (!el) { if (cb) cb(); return; }
+        if (memoryFadeInterval) clearInterval(memoryFadeInterval);
+        const from = el.volume;
+        const steps = Math.max(1, Math.round(ms / 60));
+        let i = 0;
+        memoryFadeInterval = setInterval(function () {
+          i++;
+          el.volume = Math.min(1, Math.max(0, from + (target - from) * (i / steps)));
+          if (i >= steps) { clearInterval(memoryFadeInterval); memoryFadeInterval = null; if (cb) cb(); }
+        }, 60);
+      }
+
+      function startMemoryMusic() {
+        if (memoryMusicStarted || !memoryMusic) return;
+        memoryMusicStarted = true;
+        memoryMusic.muted = !!(bgMusic && bgMusic.muted);
+        memoryMusic.volume = 0;
+        const played = memoryMusic.play();
+        const armRetry = function () {
+          function retry() {
+            memoryMusic.play().then(function () {
+              muteBtn.classList.add("show");
+              fadeElementVolume(memoryMusic, 0.55, 3000);
+            }).catch(function () {});
+            document.removeEventListener("pointerdown", retry);
+          }
+          document.addEventListener("pointerdown", retry, { passive: true });
+        };
+        if (played && played.then) {
+          played.then(function () {
+            muteBtn.classList.add("show");
+            fadeElementVolume(memoryMusic, 0.55, 3000);
+          }).catch(function () {
+            memoryMusicStarted = false;
+            armRetry();
+          });
+        } else {
+          fadeElementVolume(memoryMusic, 0.55, 3000);
+        }
+      }
+
+      // fade the proposal song out, then fade the memory song in — never both at full volume
+      function crossToMemoryMusic() {
+        if (bgMusic && musicStarted) {
+          fadeMusicTo(0, 2200);
+          setTimeout(function () { try { bgMusic.pause(); } catch (e) { /* ignore */ } }, 2350);
+        }
+        startMemoryMusic();
       }
 
       // safety net: if the very first play() is blocked, the next tap anywhere starts it
@@ -1477,7 +2122,7 @@
       let minis = [];
       let soulArmed = false;
 
-      const order = ["scene1", "scene2", "scene3", "scene4", "scene5", "scene6", "scene7", "scene8", "scene9", "scene10", "scene11", "sceneSuccess"];
+      const order = ["scene1", "scene2", "scene3", "scene4", "scene5", "scene6", "scene7", "scene8", "scene9", "scene10", "scene11", "sceneSuccess", "sceneLoveMemory"];
 
       function goTo(id) {
         RUN++;
@@ -2065,13 +2710,114 @@
         if (!alive(my)) return;
         setLine(document.getElementById("succLine"), "I already know where home is.", "big");
         celebrationButterflies(scaleCount(10));
+        await hold(RM ? 500 : 4200);
+        if (!alive(my)) return;
+        goTo("sceneLoveMemory");
       };
+
+      function setLineHTML(lineEl, html, cls) {
+        lineEl.innerHTML = html;
+        lineEl.className = cls;
+        void lineEl.offsetWidth;
+        lineEl.classList.add("show");
+      }
+
+      enters.sceneLoveMemory = async function (my) {
+        bfReset();
+        clearParticles();
+        stage.classList.remove("warm");
+        crossToMemoryMusic();
+
+        const imgWrap = document.getElementById("lmImageWrap");
+        imgWrap.classList.add("in");
+        await hold(1500);
+        if (!alive(my)) return;
+
+        setLine(document.getElementById("lmRadhaLine"), "என் ராதா… ❤️", "names");
+        await hold(2600);
+        if (!alive(my)) return;
+
+        const poemSteps = [
+          ["poem1", 2600], ["poem2", 2600], ["poem3", 2800], ["poem4", 2800],
+          ["poem5", 2600], ["poem6", 3400], ["poem7", 2800], ["poem8", 3600],
+          ["poem9", 3200], ["poem10", 2000], ["poem11", 2600], ["poem12", 3200],
+          ["poem13", 3400]
+        ];
+        for (let i = 0; i < poemSteps.length; i++) {
+          if (!alive(my)) return;
+          document.getElementById(poemSteps[i][0]).classList.add("show");
+          await hold(poemSteps[i][1]);
+        }
+        if (!alive(my)) return;
+
+        // a slow, deliberate pause before the final cinematic confession
+        await hold(2600);
+        if (!alive(my)) return;
+
+        setLine(document.getElementById("lmClimax1"), "என் ராதா…", "lm-climax-line tamil-text");
+        await hold(2600);
+        if (!alive(my)) return;
+
+        setLineHTML(
+          document.getElementById("lmClimax2"),
+          "இந்த வாழ்க்கையில் மட்டும் அல்ல…<br>எல்லா வாழ்க்கையிலும்<br>உன்னையே காதலிக்க ஆசைப்படுகிறேன்.",
+          "lm-climax-line tamil-text"
+        );
+        await hold(3800);
+        if (!alive(my)) return;
+
+        setLineHTML(
+          document.getElementById("lmClimax3"),
+          "நீ என் காதலாக வந்ததற்கு<br>நன்றி…",
+          "lm-climax-line tamil-text"
+        );
+        await hold(3000);
+        if (!alive(my)) return;
+
+        setLineHTML(
+          document.getElementById("lmHeroFinal"),
+          "என் உயிருக்கு கிடைத்த<br>அழகான வரம் — நீ. ❤️",
+          "lm-hero-line tamil-text"
+        );
+        await hold(4400);
+        if (!alive(my)) return;
+
+        // the soul takes flight one more time — graceful curved path, natural wing beat
+        bfShow("bf--cross");
+        await hold(RM ? 500 : 6200);
+        if (!alive(my)) return;
+        bfReset();
+
+        await hold(1000);
+        if (!alive(my)) return;
+        document.getElementById("replyBlock").classList.add("show");
+      };
+
+      // fires once a saved reply (fresh submit or returning-visitor load) is on screen
+      window.addEventListener("loveReplySaved", async function () {
+        if (current !== "sceneLoveMemory") return;
+        const my = RUN;
+        await hold(1700);
+        if (!alive(my)) return;
+        setLine(document.getElementById("lmFinalLine1"), "உன் வார்த்தைகள் என் வாழ்நாள் நினைவாக இருக்கும்… ❤️", "big tamil-text");
+        await hold(3400);
+        if (!alive(my)) return;
+        setLine(document.getElementById("lmFinalLine2"), NAMES, "names");
+        await hold(2200);
+        if (!alive(my)) return;
+        bfShow("bf--cross");
+      });
 
       // ----------------------------------------
       // interaction wiring
       // ----------------------------------------
       document.getElementById("heartBtn").addEventListener("click", onHeartTap);
-      btfly.addEventListener("click", onSoulTap);
+      btfly.addEventListener("pointerup", function (e) {
+        if (!soulArmed || current !== "scene5") return;
+        e.preventDefault();
+        e.stopPropagation();
+        onSoulTap();
+      });
 
       const yesBtn = document.getElementById("yesBtn");
       const waitBtn = document.getElementById("waitBtn");
@@ -2116,6 +2862,240 @@
       goTo("scene1");
 
     })();
+  </script>
+
+  <!-- ====================================================================
+       FIREBASE CLOUD FIRESTORE — SAVE & SYNC HER REPLY ACROSS DEVICES
+       This is a separate ES module because the Firebase Web SDK is
+       distributed as ES modules. It does not touch or replace any of
+       the proposal animation code above.
+  ==================================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    // ==================================================================
+    // PASTE YOUR FIREBASE WEB APP CONFIGURATION HERE
+    // Firebase Console → Project settings → Your apps → Web app → SDK config
+    // This is the public Web SDK config, not a secret. Never put an Admin
+    // SDK / service-account private key here.
+    // ==================================================================
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyBFg07wN3VeZ97zVLp1IVjuE-KpT9nY690",
+      authDomain: "kishore-gops-love.firebaseapp.com",
+      projectId: "kishore-gops-love",
+      storageBucket: "kishore-gops-love.firebasestorage.app",
+      messagingSenderId: "648872417390",
+      appId: "1:648872417390:web:612a09741a87cf3e396e7f"
+    };
+
+    const HER_NAME = "GOPS";
+    const LOCAL_REPLY_KEY = "kishore_gops_love_reply";
+
+    // Set to true only while you are testing on your own device.
+    // Set back to false (or delete this whole block, see instructions
+    // below) before sending the link to her.
+    const OWNER_PREVIEW = false;
+
+    let db = null;
+    let firebaseReady = false;
+    let endingRevealed = false;
+
+    const statusEl = document.getElementById("firebaseStatus");
+    function setStatus(msg) { if (statusEl) statusEl.textContent = msg || ""; }
+
+    function isConfigured() {
+      return !!FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.apiKey.indexOf("PASTE_") !== 0;
+    }
+
+    function replyRef() {
+      return doc(db, "proposalReplies", "gops");
+    }
+
+    async function initFirebase() {
+      if (!isConfigured()) {
+        console.warn("Firebase config not set — using local fallback only.");
+        loadLocalIntoUI();
+        return;
+      }
+      try {
+        const app = initializeApp(FIREBASE_CONFIG);
+        const auth = getAuth(app);
+        db = getFirestore(app);
+        await signInAnonymously(auth);
+        firebaseReady = true;
+        listenForReply();
+        trySyncPendingLocal();
+      } catch (err) {
+        console.error("Firebase init/auth failed:", err);
+        firebaseReady = false;
+        loadLocalIntoUI();
+      }
+    }
+
+    function listenForReply() {
+      if (!db) return;
+      try {
+        onSnapshot(replyRef(), function (snap) {
+          if (snap.exists()) {
+            const data = snap.data();
+            renderSavedReply(data);
+            try { localStorage.removeItem(LOCAL_REPLY_KEY); } catch (e) { /* ignore */ }
+          }
+        }, function (err) {
+          console.error("Reply listener error:", err);
+        });
+      } catch (err) {
+        console.error("Failed to attach Firestore listener:", err);
+      }
+    }
+
+    async function loadSavedReplyOnce() {
+      if (!db) return null;
+      try {
+        const snap = await getDoc(replyRef());
+        if (snap.exists()) return snap.data();
+      } catch (err) {
+        console.error("loadSavedReplyOnce failed:", err);
+      }
+      return null;
+    }
+
+    async function saveReply(message) {
+      if (!firebaseReady || !db) {
+        saveLocal(message);
+        throw new Error("firebase-not-ready");
+      }
+      try {
+        await setDoc(replyRef(), {
+          name: HER_NAME,
+          message: message,
+          timestamp: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        try { localStorage.removeItem(LOCAL_REPLY_KEY); } catch (e) { /* ignore */ }
+        return true;
+      } catch (err) {
+        console.error("saveReply failed:", err);
+        saveLocal(message);
+        throw err;
+      }
+    }
+
+    function saveLocal(message) {
+      try {
+        localStorage.setItem(LOCAL_REPLY_KEY, JSON.stringify({
+          name: HER_NAME,
+          message: message,
+          savedAt: Date.now(),
+          pending: true
+        }));
+      } catch (e) { /* ignore */ }
+    }
+
+    function loadLocalIntoUI() {
+      try {
+        const raw = localStorage.getItem(LOCAL_REPLY_KEY);
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (data && data.message) renderSavedReply({ message: data.message });
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    async function trySyncPendingLocal() {
+      try {
+        const raw = localStorage.getItem(LOCAL_REPLY_KEY);
+        if (!raw || !firebaseReady || !db) return;
+        const data = JSON.parse(raw);
+        if (!data || !data.message) return;
+        await setDoc(replyRef(), {
+          name: HER_NAME,
+          message: data.message,
+          timestamp: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+        localStorage.removeItem(LOCAL_REPLY_KEY);
+      } catch (err) {
+        console.error("Pending local sync failed:", err);
+      }
+    }
+    window.addEventListener("online", trySyncPendingLocal);
+
+    // ---------------- UI ----------------
+    function renderSavedReply(data) {
+      const card = document.getElementById("savedReplyCard");
+      const msgEl = document.getElementById("savedReplyMessage");
+      if (!card || !msgEl || !data) return;
+      msgEl.textContent = data.message || "";
+      card.style.display = "flex";
+      card.classList.remove("show");
+      void card.offsetWidth;
+      card.classList.add("show");
+      if (!endingRevealed) {
+        endingRevealed = true;
+        window.dispatchEvent(new CustomEvent("loveReplySaved"));
+      }
+    }
+
+    const textarea = document.getElementById("loveReply");
+    const sendBtn = document.getElementById("sendReplyBtn");
+    const replyNote = document.getElementById("replyNote");
+
+    function showNote(text) {
+      if (!replyNote) return;
+      replyNote.textContent = text;
+      replyNote.classList.add("show");
+    }
+
+    if (sendBtn) {
+      sendBtn.addEventListener("click", async function () {
+        if (sendBtn.disabled) return;
+        const raw = textarea ? textarea.value : "";
+        const message = raw.trim().slice(0, 1000);
+        if (!message) {
+          showNote("என் ராதா… உன் மனதில் ஒரு வார்த்தையாவது எழுதிவிடு ❤️");
+          return;
+        }
+        sendBtn.disabled = true;
+        showNote("உன் வார்த்தைகளை என் இதயம் சேமித்துக்கொண்டிருக்கிறது… ❤️");
+        try {
+          await saveReply(message);
+          showNote("உன் வார்த்தைகள் என் இதயத்தில் என்றும் இருக்கும்… ❤️");
+          renderSavedReply({ message: message });
+        } catch (err) {
+          if (err && (err.message === "firebase-not-ready" || err.code)) {
+            showNote("இணைய இணைப்பு கிடைத்ததும் உன் பதில் மீண்டும் அனுப்பப்படும் ❤️");
+            renderSavedReply({ message: message });
+          } else {
+            showNote("ஒரு சிறிய நேரம் காத்திருக்கலாம்… ❤️");
+          }
+        } finally {
+          sendBtn.disabled = false;
+        }
+      });
+    }
+
+    // ---------------- owner-only preview (dev use, safe to leave false) ----------------
+    if (OWNER_PREVIEW) {
+      const btn = document.createElement("button");
+      btn.id = "ownerPreviewBtn";
+      btn.type = "button";
+      btn.textContent = "View saved reply";
+      btn.addEventListener("click", async function () {
+        const data = await loadSavedReplyOnce();
+        if (data) {
+          const when = data.updatedAt && data.updatedAt.toDate ? data.updatedAt.toDate().toString() : "n/a";
+          alert("Name: " + data.name + "\nMessage: " + data.message + "\nUpdated: " + when);
+        } else {
+          alert("No saved reply yet.");
+        }
+      });
+      document.body.appendChild(btn);
+    }
+
+    initFirebase();
   </script>
 </body>
 
